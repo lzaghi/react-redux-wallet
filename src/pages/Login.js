@@ -29,7 +29,7 @@ class Login extends React.Component {
   validateForm = () => {
     const { email, password } = this.state;
     const FIVE = 5;
-    console.log(password);
+
     const filledForm = this.verifyEmail(email)
       && password.length > FIVE;
 
