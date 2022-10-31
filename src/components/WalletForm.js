@@ -3,7 +3,14 @@ import React, { Component } from 'react';
 class WalletForm extends Component {
   render() {
     return (
-      <div>WalletForm</div>
+      <form>
+        <input
+          data-testid="value-input"
+          type="number"
+          name="expense"
+          placeholder="Despesa"
+        />
+      </form>
     );
   }
 }
