@@ -3,6 +3,7 @@ export const LOGIN = 'LOGIN';
 export const FETCHING = 'FETCHING';
 export const FETCH_SUCCESS = 'FETCH_SUCCESS';
 export const FETCH_FAIL = 'FETCH_FAIL';
+export const ADD_EXPENSE = 'ADD_EXPENSE';
 
 export const loginAction = (email) => ({
   type: LOGIN,
@@ -15,7 +16,7 @@ export const fetchCurrencies = () => ({
 
 export const fetchSuccess = (json) => ({
   type: FETCH_SUCCESS,
-  data: Object.keys(json).filter((currency) => currency !== 'USDT'),
+  data: json,
 });
 
 export const fetchFail = (error) => ({
@@ -30,3 +31,8 @@ export const fetchAPI = () => (dispatch) => {
     .then((json) => dispatch(fetchSuccess(json)))
     .catch((error) => dispatch(fetchFail(error)));
 };
+
+export const addExpense = (expenses, item) => ({
+  type: ADD_EXPENSE,
+  item: [...expenses, item],
+});

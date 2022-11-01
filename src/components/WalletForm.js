@@ -1,14 +1,14 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { fetchAPI } from '../redux/actions';
+import { addExpense, fetchAPI } from '../redux/actions';
 
 class WalletForm extends Component {
   constructor() {
     super();
 
     this.state = {
-      value: 0,
+      value: '',
       description: '',
       currency: 'USD',
       method: 'Dinheiro',
@@ -28,6 +28,17 @@ class WalletForm extends Component {
     });
   };
 
+  saveExpenses = () => {
+    const { dispatch } = this.props;
+    dispatch(fetchAPI());
+
+    const { expenses, data } = this.props;
+    const expenseItem = { ...this.state, id: expenses.length, exchangeRates: data };
+    dispatch(addExpense(expenses, expenseItem));
+
+    this.setState({ value: '', description: '' });
+  };
+
   render() {
     const { isFetching, currencies } = this.props;
     const { value, description, currency, method, tag } = this.state;
@@ -41,7 +52,7 @@ class WalletForm extends Component {
               type="number"
               name="value"
               value={ value }
-              placeholder="Despesa"
+              placeholder="Valor"
               onChange={ this.handleChange }
             />
             <input
@@ -49,7 +60,7 @@ class WalletForm extends Component {
               type="text"
               name="description"
               value={ description }
-              placeholder="Despesa"
+              placeholder="Descrição"
               onChange={ this.handleChange }
             />
             <select
@@ -84,6 +95,7 @@ class WalletForm extends Component {
               <option>Transporte</option>
               <option>Saúde</option>
             </select>
+            <button type="button" onClick={ this.saveExpenses }>Adicionar despesa</button>
           </form>
         )
     );
@@ -93,10 +105,18 @@ class WalletForm extends Component {
 const mapStateToProps = (state) => ({
   currencies: state.wallet.currencies,
   isFetching: state.wallet.isFetching,
+  expenses: state.wallet.expenses,
+  data: state.wallet.data,
 });
+
+WalletForm.defaultProps = {
+  data: {},
+};
 
 WalletForm.propTypes = {
   currencies: PropTypes.arrayOf(PropTypes.string).isRequired,
+  expenses: PropTypes.arrayOf(PropTypes.shape).isRequired,
+  data: PropTypes.shape(),
   dispatch: PropTypes.func.isRequired,
   isFetching: PropTypes.bool.isRequired,
 };
