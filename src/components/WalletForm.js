@@ -33,7 +33,7 @@ class WalletForm extends Component {
     dispatch(fetchAPI());
 
     const { expenses, data } = this.props;
-    const expenseItem = { ...this.state, id: expenses.length, exchangeRates: data };
+    const expenseItem = { id: expenses.length, ...this.state, exchangeRates: data };
     dispatch(addExpense(expenses, expenseItem));
 
     this.setState({ value: '', description: '' });
