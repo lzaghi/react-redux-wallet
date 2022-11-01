@@ -1,6 +1,6 @@
 // Esse reducer será responsável por tratar o todas as informações relacionadas as despesas
 import { FETCHING,
-  FETCH_SUCCESS, FETCH_FAIL, ADD_EXPENSE } from '../actions';
+  FETCH_SUCCESS, FETCH_FAIL, ADD_EXPENSE, EDITING, EDITED } from '../actions';
 
 const INITIAL_STATE = {
   currencies: [],
@@ -34,8 +34,18 @@ const wallet = (state = INITIAL_STATE, action) => {
   case ADD_EXPENSE:
     return {
       ...state,
-      isFetching: false,
       expenses: action.item,
+    };
+  case EDITING:
+    return {
+      ...state,
+      editor: true,
+      idToEdit: action.idToEdit,
+    };
+  case EDITED:
+    return {
+      ...state,
+      editor: false,
     };
   default:
     return state;

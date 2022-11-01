@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { addExpense, fetchAPI } from '../redux/actions';
+import { addExpense, fetchAPI, finishEditing } from '../redux/actions';
 
 class WalletForm extends Component {
   constructor() {
@@ -39,8 +39,21 @@ class WalletForm extends Component {
     this.setState({ value: '', description: '' });
   };
 
+  updateExpenses = () => {
+    const { dispatch, expenses, idToEdit } = this.props;
+
+    const updatedItem = { ...expenses[idToEdit], ...this.state };
+
+    expenses[idToEdit] = updatedItem;
+
+    dispatch(addExpense(expenses));
+    this.setState({ value: '', description: '' });
+
+    dispatch(finishEditing());
+  };
+
   render() {
-    const { isFetching, currencies } = this.props;
+    const { isFetching, currencies, editor } = this.props;
     const { value, description, currency, method, tag } = this.state;
     return (
       isFetching
@@ -95,7 +108,23 @@ class WalletForm extends Component {
               <option>Transporte</option>
               <option>Saúde</option>
             </select>
-            <button type="button" onClick={ this.saveExpenses }>Adicionar despesa</button>
+            { editor
+              ? (
+                <button
+                  type="button"
+                  onClick={ this.updateExpenses }
+                >
+                  Editar despesa
+                </button>
+              )
+              : (
+                <button
+                  type="button"
+                  onClick={ this.saveExpenses }
+                >
+                  Adicionar despesa
+                </button>
+              )}
           </form>
         )
     );
@@ -107,6 +136,8 @@ const mapStateToProps = (state) => ({
   isFetching: state.wallet.isFetching,
   expenses: state.wallet.expenses,
   data: state.wallet.data,
+  editor: state.wallet.editor,
+  idToEdit: state.wallet.idToEdit,
 });
 
 WalletForm.defaultProps = {
@@ -119,6 +150,8 @@ WalletForm.propTypes = {
   data: PropTypes.shape(),
   dispatch: PropTypes.func.isRequired,
   isFetching: PropTypes.bool.isRequired,
+  editor: PropTypes.bool.isRequired,
+  idToEdit: PropTypes.number.isRequired,
 };
 
 export default connect(mapStateToProps)(WalletForm);

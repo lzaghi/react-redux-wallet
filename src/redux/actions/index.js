@@ -5,6 +5,8 @@ export const FETCH_SUCCESS = 'FETCH_SUCCESS';
 export const FETCH_FAIL = 'FETCH_FAIL';
 export const ADD_EXPENSE = 'ADD_EXPENSE';
 export const REMOVE_EXPENSE = 'REMOVE_EXPENSE';
+export const EDITING = 'EDITING';
+export const EDITED = 'EDITED';
 
 export const loginAction = (email) => ({
   type: LOGIN,
@@ -36,4 +38,13 @@ export const fetchAPI = () => (dispatch) => {
 export const addExpense = (expenses, item) => ({
   type: ADD_EXPENSE,
   item: item ? [...expenses, item] : [...expenses],
+});
+
+export const startEditing = (itemID) => ({
+  type: EDITING,
+  idToEdit: itemID,
+});
+
+export const finishEditing = () => ({
+  type: EDITED,
 });
