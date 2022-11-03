@@ -53,8 +53,9 @@ class WalletForm extends Component {
   };
 
   render() {
-    const { isFetching, currencies, editor } = this.props;
+    const { isFetching, currencies, editor, error } = this.props;
     const { value, description, currency, method, tag } = this.state;
+    if (error) return 'Algo deu errado!';
     return (
       isFetching
         ? <p>Carregando...</p>
@@ -138,10 +139,12 @@ const mapStateToProps = (state) => ({
   data: state.wallet.data,
   editor: state.wallet.editor,
   idToEdit: state.wallet.idToEdit,
+  error: state.wallet.error,
 });
 
 WalletForm.defaultProps = {
   data: {},
+  error: null,
 };
 
 WalletForm.propTypes = {
@@ -152,6 +155,7 @@ WalletForm.propTypes = {
   isFetching: PropTypes.bool.isRequired,
   editor: PropTypes.bool.isRequired,
   idToEdit: PropTypes.number.isRequired,
+  error: PropTypes.string,
 };
 
 export default connect(mapStateToProps)(WalletForm);
